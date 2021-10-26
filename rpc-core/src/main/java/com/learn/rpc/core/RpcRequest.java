@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @date 2021/10/12
  */
 @Data
-public class MiniRpcRequest implements Serializable {
+public class RpcRequest implements Serializable {
     private String serviceVersion;
     private String className;
     private String methodName;

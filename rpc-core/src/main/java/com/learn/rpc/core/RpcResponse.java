@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @date 2021/10/12
  */
 @Data
-public class MiniRpcResponse implements Serializable {
+public class RpcResponse implements Serializable {
     private Object data;
     private String message;
 }
