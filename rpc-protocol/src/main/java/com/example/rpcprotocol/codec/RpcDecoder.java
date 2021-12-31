@@ -2,7 +2,7 @@ package com.example.rpcprotocol.codec;
 
 import com.example.rpcprotocol.protocol.MsgHeader;
 import com.example.rpcprotocol.protocol.MsgType;
-import com.example.rpcprotocol.protocol.ProtocolConstens;
+import com.example.rpcprotocol.protocol.ProtocolConstants;
 import com.example.rpcprotocol.protocol.RpcProtocol;
 import com.example.rpcprotocol.serialization.RpcSerialization;
 import com.example.rpcprotocol.serialization.SerializationFactory;
@@ -12,8 +12,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -32,7 +30,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
     */
     @Override
     public final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (in.readableBytes() < ProtocolConstens.HEADER_TOTAL_LEN) {
+        if (in.readableBytes() < ProtocolConstants.HEADER_TOTAL_LEN) {
             //可读的数据小于请求头总的大小  直接丢弃
             return;
         }
@@ -41,7 +39,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
 
         //魔数
         short magic = in.readShort();
-        if (magic != ProtocolConstens.MAGIC) {
+        if (magic != ProtocolConstants.MAGIC) {
             throw new IllegalArgumentException("magic number is illegal, " + magic);
         }
 
