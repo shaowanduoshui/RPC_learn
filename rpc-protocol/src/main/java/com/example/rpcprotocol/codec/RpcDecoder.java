@@ -12,6 +12,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -31,23 +33,29 @@ public class RpcDecoder extends ByteToMessageDecoder {
     @Override
     public final void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         if (in.readableBytes() < ProtocolConstens.HEADER_TOTAL_LEN) {
+            //可读的数据小于请求头总的大小  直接丢弃
             return;
         }
+        // 标记 ByteBuf 读指针的位置
         in.markReaderIndex();
 
+        //魔数
         short magic = in.readShort();
         if (magic != ProtocolConstens.MAGIC) {
             throw new IllegalArgumentException("magic number is illegal, " + magic);
         }
 
+        //版本
         byte version = in.readByte();
         byte serializeType = in.readByte();
         byte msgType = in.readByte();
         byte status = in.readByte();
         long requestId = in.readLong();
+        //CharSequence requestId = in.readCharSequence(ProtocolConstens.HEADER_TOTAL_LEN, StandardCharsets.UTF_8);
 
         int dataLength = in.readInt();
         if (in.readableBytes() < dataLength) {
+            // 可读的数据长度 小于 请求体擦和高难度 直接丢弃 并重置 读指针位置
             in.resetReaderIndex();
             return;
         }
